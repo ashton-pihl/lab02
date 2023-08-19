@@ -31,8 +31,11 @@ The repository consists of the following files:
 
 This lab uses on the following packages:
 
+- `CSV.jl`
+- `DataFrames.jl`
 - `Plots.jl`
 - `Distributions.jl`
+- `Statistics.jl`
 
 ## Prerequisites
 
