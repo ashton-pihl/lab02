@@ -41,7 +41,7 @@ jobs:
           version: 1.9
 
       - name: Install IJulia
-        run: julia -e 'using Pkg; Pkg.activate("."); Pkg.instantiate(); Pkg.build("IJulia")'
+        run: julia -e 'using Pkg; Pkg.activate("."); Pkg.instantiate(); Pkg.add("IJulia"); Pkg.build("IJulia")'
 
       - name: Render Notebook
         uses: quarto-dev/quarto-actions/render@v2
