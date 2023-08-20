@@ -162,7 +162,7 @@ $$cD\frac{dT}{dt} = F - \lambda T$$ where $c\approx 4.184\times 10^6$ J/K/m$^2$ 
 
 ### Equilibrium Climate Sensitivity and the Feedback Factor
 
-Suppose that we were to apply a constant radiative forcing $F$ to the planet under this model. Then, under a steady-state or equilibrium condition $\frac{dT}{dt} = 0$, the final equilibrium temperature would be $$T = \frac{F}{\lambda}.$$
+Suppose that we were to apply a constant radiative forcing $F$ to the planet under this model. Then, under a steady-state or equilibrium condition $dT/dt = 0$, the final equilibrium temperature would be $$T = \frac{F}{\lambda}.$$
 In other words, the proportionality coefficient $\lambda$ controls the level of warming under equilibrium. For the specific case where $F$ is due to a doubling of atmospheric CO~2~ ($F_{2\times \text{CO}_2} \approx 4 \text{W/m}^2), the final equilibrium temperature is called *equilibrium climate sensitivity (ECS)* $S$,
 $$S = F_{2\times \text{CO}_2}/\lambda.$$
 
@@ -213,7 +213,7 @@ function EBM(S; forcing_non_aerosol=forcing_non_aerosol, forcing_aerosol=forcing
 end
 ```
 
-For example, running the model with $S=3.1^\degree \text{C}$ (which is the central estimate from Sherwood et. al. (2020)) produces the following time results.
+For example, running the model with $S=3.1^\circ\text{C}$ (which is the central estimate from Sherwood et. al. (2020)) produces the following time results.
 
 ```{julia}
 T = EBM(3.1)
