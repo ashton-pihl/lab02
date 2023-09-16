@@ -69,6 +69,7 @@ Monte Carlo methods involve the simulation of random numbers from probability di
 Julia provides a common interface for probability distributions with the [`Distributions.jl` package](https://juliastats.org/Distributions.jl/stable/). The basic workflow for sampling from a distribution is:
 
 1. Set up the distribution. The specific syntax depends on the distribution and what parameters are required, but the general call is the similar. For a normal distribution or a uniform distribution, the syntax is
+   
     ```julia
     # you don't have to name this "normal_distribution"
     # μ is the mean and σ is the standard deviation
@@ -79,6 +80,7 @@ Julia provides a common interface for probability distributions with the [`Distr
 
     There are lots of both [univariate](https://juliastats.org/Distributions.jl/stable/univariate/#Index) and [multivariate](https://juliastats.org/Distributions.jl/stable/multivariate/) distributions, as well as the ability to create your own, but we won't do anything too exotic here.
 2. Draw samples. This uses the `rand()` command (which, when used without a distribution, just samples uniformly from the interval $[0, 1]$.) For example, to sample from our normal distribution above:
+   
     ```julia
     # draw n samples
     rand(normal_distribution, n)
