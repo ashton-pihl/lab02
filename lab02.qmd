@@ -145,7 +145,7 @@ Write a function called `passadieci()` to simulate this game, which will take as
 ::: {.cell .markdown}
 ### Problem 1.2 (2 points)
 
-Generate 100,000 simulations of the game using your `passadieci()` function. Plot how the computed probability of winning the game changes as the number of simulations increases (you can do this by computing the frequency of wins for each additional simulation).
+Generate 5,000 simulations of the game using your `passadieci()` function. Plot how the computed probability of winning the game changes as the number of simulations increases (you can do this by computing the frequency of wins for each additional simulation).
 
 :::
 
@@ -176,7 +176,12 @@ showcase_dist = truncated(Normal(31000, 4500), lower=5000, upper=42000)
 ::: {.cell .markdown}
 #### Problem 2.1 (3 points)
 
-Write a function `showcase()` which takes in a bid value and uses Monte Carlo simulation to compute the expected value of the winnings. Assume that if you win both showcases, the value is the double of the single showcase value. How did you decide how many samples to use within the function?
+Write a function `showcase()` which takes in a bid value and uses Monte Carlo simulation to compute the expected value of the winnings. Make the following assumptions about your expected winnings if you don't overbid:
+
+* If you win both showcases, the value is the double of the single showcase value. 
+* If you did not win both showcases but bid under the showcase value, the probability of being outbid increases linearly as the distance between your bid and the value increases (in other words, if you bid the exact value, you win with probability 1, and if you bid \$0, you win with probability 0).
+
+How did you decide how many samples to use within the function?
 
 :::
 ::: {.cell .markdown}
