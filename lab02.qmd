@@ -1,5 +1,6 @@
 ---
 title: "BEE 4750 Lab 2: Uncertainty and Monte Carlo"
+date: last-modified
 format:
     html:        
         warning: true
@@ -8,8 +9,16 @@ format:
         warning: true
         error: true
         code-annotation: below
-jupyter: julia-1.9
-format-links: []
+    pdf:
+        include-in-header: 
+           text: |
+            \usepackage{fvextra}
+            \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+            \DefineVerbatimEnvironment{OutputCode}{Verbatim}{breaklines,commandchars=\\\{\}}
+execute: 
+    echo: true
+engine: julia
+format-links: [pdf, ipynb]
 ---
 
 ::: {.content-visible when-format="ipynb"}
@@ -23,7 +32,7 @@ format-links: []
 ::: {.callout-important icon=false}
 ### Due Date
 
-Friday, 9/22/23, 9:00pm
+Wednesday, 9/25/24, 9:00pm
 :::
 
 ::: {.content-visible when-format="html"}
@@ -60,11 +69,27 @@ using Plots # plotting
 ```
 
 
-## Introduction
+## Overview
 
-In this lab, you will use Monte Carlo analysis to estimate the expected winnings for a couple of different games of chance.
+In this lab, we will use Monte Carlo analysis to analyze a version of the culmination of every episode of the long-running game show [The Price Is Right](https://en.wikipedia.org/wiki/The_Price_Is_Right): the [Showcase](https://en.wikipedia.org/wiki/The_Price_Is_Right#Showcase). 
 
 Monte Carlo methods involve the simulation of random numbers from probability distributions. In an environmental context, we often propagate these random numbers through some more complicated model and then compute a resulting statistic which is relevant for assessing performance or risk, such as an average outcome or a particular quantile.
+
+You should always start any computing with random numbers by setting a "seed," which controls the sequence of numbers which are generated (since these are not *really* random, just "pseudorandom"). In Julia, we do this with the `Random.seed!()` function.
+
+```{julia}
+Random.seed!(1)
+```
+
+It doesn't matter what seed you set, though different seeds might result in slightly different values. But setting a seed means every time your notebook is run, the answer will be the same.
+
+::: {.callout-warning}
+## Seeds and Reproducing Solutions
+
+If you don't re-run your code in the same order or if you re-run the same cell repeatedly, you will not get the same solution. If you're working on a specific problem, you might want to re-use `Random.seed()` near any block of code you want to re-evaluate repeatedly.
+:::
+
+### Probability Distributions and Julia
 
 Julia provides a common interface for probability distributions with the [`Distributions.jl` package](https://juliastats.org/Distributions.jl/stable/). The basic workflow for sampling from a distribution is:
 
@@ -100,6 +125,8 @@ ylabel!("Count")
 xlabel!("Dice Value")
 ```
 
+### Instructions
+
 **Remember to**:
 
 -   Evaluate all of your code cells, in order (using a `Run All`
@@ -108,58 +135,8 @@ xlabel!("Dice Value")
 -   Tag each of the problems when you submit to Gradescope; a 10%
     penalty will be deducted if this is not done.
 
-::: {.cell .markdown}
-## Exercises (10 points)
 
-In Problem 1, you will compute the probability of getting a specific combination of multiple dice rolls. The focus will be on understanding how the Monte Carlo estimate changes based on the number of simulations.
-
-In Problem 2, we will implement the culmination of every episode of the long-running game show [The Price Is Right](https://en.wikipedia.org/wiki/The_Price_Is_Right): the [Showcase](https://en.wikipedia.org/wiki/The_Price_Is_Right#Showcase). You will be asked to make a plot of expected winnings by bid for a particular distribution of prize values.
-
-You should always start any computing with random numbers by setting a "seed," which controls the sequence of numbers which are generated (since these are not *really* random, just "pseudorandom"). In Julia, we do this with the `Random.seed!()` function.
-
-```{julia}
-Random.seed!(1)
-```
-
-It doesn't matter what seed you set, though different seeds might result in slightly different values. But setting a seed means every time your notebook is run, the answer will be the same.
-
-::: {.callout-warning}
-## Seeds and Reproducing Solutions
-
-If you don't re-run your code in the same order or if you re-run the same cell repeatedly, you will not get the same solution. If you're working on a specific problem, you might want to re-use `Random.seed()` near any block of code you want to re-evaluate repeatedly.
-:::
-
-:::
-
-::: {.cell .markdown}
-### Problem 1 (5 points)
-
-We want to know the probability of getting at least an 11 from rolling three fair, six-sided dice (this is actually an old Italian game called *passadieci*, which was analyzed by Galileo as one of the first examples of a rigorous study of probability).
-
-:::
-::: {.cell .markdown}
-#### Problem 1.1 (1 point)
-
-Write a function called `passadieci()` to simulate this game, which will take as an input the number of realizations and output a vector of the sum of the three dice rolls for each realization.
-
-:::
-
-::: {.cell .markdown}
-### Problem 1.2 (2 points)
-
-Generate 5,000 simulations of the game using your `passadieci()` function. Plot how the computed probability of winning the game changes as the number of simulations increases (you can do this by computing the frequency of wins for each additional simulation).
-
-:::
-
-::: {.cell .markdown}
-### Problem 1.3 (2 point)
-
-Based on your plot from Problem 1.2, how many simulations were needed for the win probability estimate to converge? What did you notice from your plot about the estimates prior to convergence?
-
-:::
-
-::: {.cell .markdown}
-## Problem 2 (5 points)
+## Exercise (3 Points)
 
 The Showcase is the final round of every episode of The Price is Right, matching the two big winners from the episode. Each contestant is shown a "showcase" of prizes, which are usually some combination of a trip, a motor vehicle, some furniture, and maybe some other stuff. They then each have to make a bid on the retail price of the showcase. The rules are:
 
@@ -167,31 +144,23 @@ The Showcase is the final round of every episode of The Price is Right, matching
 * the contest who gets closest to the retail price wins their showcase;
 * if a contestant gets within \$250 of the retail price and is closer than their opponent, they win both showcases.
 
-Your goal is to find a wager which maximizes your expected winnings, which we may as well call utility, based on your assessment of the probability of your showcase retail price. We'll assume that the distribution of all showcases offered by the show is given as truncated normal distribution, which means a normal distribution which has an upper and/or lower bound. `Distributions.jl` makes it easy to specify truncations on any distribution, not just normal distributions. For example, we'll use this distribution for the showcase values:
 
-```{julia}
-showcase_dist = truncated(Normal(31000, 4500), lower=5000, upper=42000)
-```
-
-:::
-
-::: {.cell .markdown}
-#### Problem 2.1 (3 points)
-
-Write a function `showcase()` which takes in a bid value and uses Monte Carlo simulation to compute the expected value of the winnings. Make the following assumptions about your expected winnings if you don't overbid:
+Your goal is to find a wager which maximizes your expected winnings, which we may as well call utility, based on your assessment of the probability of your showcase retail price. Make the following assumptions about your expected winnings if you don't overbid:
 
 * If you win both showcases, the value is the double of the single showcase value. 
 * If you did not win both showcases but bid under the showcase value, the probability of being outbid increases linearly as the distance between your bid and the value increases (in other words, if you bid the exact value, you win with probability 1, and if you bid \$0, you win with probability 0).
 
-How did you decide how many samples to use within the function?
+We'll assume that the distribution of all showcases offered by the show is given as truncated normal distribution, which means a normal distribution which has an upper and/or lower bound. `Distributions.jl` makes it easy to specify truncations on any distribution, not just normal distributions. For example, we'll use the distribution shown in @fig-values for the showcase values (you can just directly use the `showcase_dist` distribution in your lab code).
 
-:::
-::: {.cell .markdown}
-#### Problem 2.2 (2 points)
+```{julia}
+#| label: fig-values
+#| fig-cap: Distribution of Showcase values for this lab, given as a truncated normal distribution.
 
-Plot the expected winnings for bids ranging from \$0 to \$42,000. What do you notice?
+showcase_dist = truncated(Normal(31000, 4500), lower=5000, upper=42000)
+```
 
-:::
+Find your expected winnings if you bid $35,000. Plot the outcomes of your Monte Carlo experiment (iterations vs. running estimate). How did you decide how many samples to use?
+
 
 ::: {.cell .markdown}
 
