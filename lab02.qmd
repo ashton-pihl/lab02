@@ -157,6 +157,8 @@ We'll assume that the distribution of all showcases offered by the show is given
 #| fig-cap: Distribution of Showcase values for this lab, given as a truncated normal distribution.
 
 showcase_dist = truncated(Normal(31000, 4500), lower=5000, upper=42000)
+showcase_samples = rand(showcase_dist, 10_000)
+histogram(showcase_samples)
 ```
 
 Find your expected winnings if you bid $35,000. Plot the outcomes of your Monte Carlo experiment (iterations vs. running estimate). How did you decide how many samples to use?
